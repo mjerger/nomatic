@@ -1,0 +1,21 @@
+{
+    "app" : {
+        "port" : 1337
+    },
+
+    "bots" : [
+        {
+          "type"  : "telegram", 
+          "id"    : "telegram",
+          "token" : "5903461993:AAHWcaYGPd-zzi-ttJ6HoLczJN00etgEozw"
+        },
+        { 
+          "type" : "email",
+          "id"   : "mail-global",
+          "email" : "alert@neals.de"
+        }
+    ],
+
+    "hooks" : [
+    ]
+}
