@@ -65,7 +65,7 @@ class CronJobs
     }
 
     static async start() {
-        console.log ('Starting jobs');
+        console.log ('Starting cronjobs ...');
         this.run();
     }
 
@@ -89,7 +89,7 @@ class CronJobs
             const next = dates[0];
             const ms = next.getTime() - now.getTime();
 
-            console.log("Scheduling next action for " + next);
+            console.log('Cronjobs: Scheduling next action for ' + next);
             setTimeout(this.run.bind(this), ms);
         }
     }

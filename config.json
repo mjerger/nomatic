@@ -6,28 +6,35 @@
 
     "api"  : { 
       "enabled" : true, 
-      "token" : "<secret>" 
+      "token" : "0123456789abcdef013456789abcdef0123456789abcdef" 
     },
 
     "nomctrl" : {
       "enabled" : true, 
       "api" : "http://localhost:31337/",
-      "token" : "<secret>"
+      "token" : "0123456789abcdef013456789abcdef0123456789abcdef"
     },
 
     "email" : { 
       "enabled" : true, 
-      "sender"  : "<secret>",
+      "smtp" : {
+        "host" : "smtp.example.com",
+        "port" : 0,
+        "secure" : true,
+        "user" : "testuser",
+        "pass" : "testpassword"
+      },
+      "sender"  : "noreply@example.com",
       "contacts" : {
-        "alarm"   : [ ],
-        "warn"    : [ ],
-        "info"    : [ ]
+        "alarm"   : [ "alarm@example.com" ],
+        "warn"    : [ "warn@example.com"  ],
+        "info"    : [ "info@example.com"  ]
       }
     },
 
     "telegram" : {
       "enabled" : true, 
-      "token" : "<secret>"
+      "token" : "01234567890:ABCdeFGHIJ-abc-abCDEFgHIjKlmnOPQRSt"
     },
 
     "cronjobs" : [

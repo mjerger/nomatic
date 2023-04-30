@@ -1,14 +1,15 @@
+const Module = require('./module.js');
 
-class Functions 
+class Functions extends Module
 {
 
-    static getCommands() {
-
+    static cmds() {
+        return ['test']
     }
 
+    static test() {
 
-    static 
-
+    }
 }
 
 module.exports = Functions;

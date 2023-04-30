@@ -1,0 +1,20 @@
+[
+    { 
+      "cmd" : "nomctrl",
+      "man" : "Send commands to nomctrl.",
+      "args" : [
+        { 
+            "cmd" : "set",
+            "man" : "Set a value on a node.",
+            "syntax" : "set nodeA nodeB groupC [on|off] [color|rgb()|#hex] [brightness[%]]",
+            "examples" : [ "set apartment on", "set living on evening 50%"]
+        },
+
+        { 
+            "cmd" : "get",
+            "man" : "Get a value from a node.",
+            "syntax" : "get [min|max|sum|avg] nodeA nodeB groupC [attribute]",
+            "examples" : [ "get sum apartment power", "get max living brightness"]
+        }
+      ]}
+]

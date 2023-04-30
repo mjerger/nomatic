@@ -1,27 +1,33 @@
 
 class Commands 
 {
-    static commands = new Map();
+    static cmds = new Map();
 
-    static init(...providers) {
+    static init(modules) {
         console.log ('Loading commands ...', );
 
-        this.commands.clear();
-        for (const prov of providers) {
-            for (const args of prov.getCommands()) {
-                this.commands.set(args, args.slice(1))
+        this.cmds.clear();
+
+        // modules
+        for (const module of modules) {
+            for (const cmd of module.cmds()) {
+                this.cmds.set(cmd, module);
             }
         }
+
+        // built-in
+        // TODO
     }
 
-    static exec(id, ...args) {
-        var cmd = this.commands.get(id);
-        if (cmd !== undefined) {
-            cmd(...args);
+    static async exec(cmd, ...args) {
+        var module = this.cmds.get(cmd);
+        if (module !== undefined) {
+            module.exec(...args);
         }
         else {
-            console.log(`Command Error: Could not execute ${id} with argument ${args.join(' ')}`);
+            console.log(`Command Error: Could not execute ${cmd} with argument ${args.join(' ')}`);
         }
     }
-
 }
+
+module.exports = Commands;

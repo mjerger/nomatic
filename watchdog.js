@@ -1,3 +1,4 @@
+const Module = require('./module.js');
 
 class WatchdogTimer 
 {
@@ -25,7 +26,7 @@ class WatchdogTimer
 }
 
 
-class Watchdog
+class Watchdog extends Module
 {
     static timers = new Map();
     
