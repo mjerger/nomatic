@@ -1,8 +1,9 @@
-const Utils    = require('./utils.js');
 const Config   = require('./config.js');
-const Bots     = require('./bots.js');
-const Jobs     = require('./jobs.js');
-const Hooks    = require('./hooks.js');
+const Telegram = require('./telegram.js');
+const Commands = require('./commands.js');
+const Jobs     = require('./cronjobs.js');
+const Watchdog = require('./watchdog.js');
+const Hooks    = require('./webhooks.js');
 
 const express = require("express");
 const bodyParser = require('body-parser');
@@ -16,13 +17,13 @@ app.listen(Config.app().port, function () {
 
     console.log ("Loading config...");
 
-    Bots.init(Config.bots());
-    Jobs.init();
-    Hooks.init(Config.hooks());
+    Jobs    .init(Config.cronjobs());
+    Watchdog.init(Config.watchdog());
+    Hooks   .init(Config.webhooks());
+    Telegram.init(Config.telegram());
 
-    Bots.start();
-    Jobs.start();
-    Hooks.start();
+    Jobs    .start();
+    Telegram.start();
 
     console.log(`nomatic listening on port ${Config.app().port}!`);
 });
@@ -33,7 +34,8 @@ app.get("/", async (req, res) => {
     res.send("nomatic up");
 });
 
-app.get("/status", async (req, res) => {
+app.bind("/api", async (req, res) => {
+
     //TODO status page
     res.send("nomatic up");
 });

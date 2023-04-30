@@ -14,6 +14,33 @@ class Utils {
         if (response) 
             return response.data;
     }
+
+    static isObject(item) {
+        return (item && 
+                typeof item === 'object' && 
+                !Array.isArray(item));
+    }
+
+    static mergeDeep(target, ...sources) {
+        if (!sources.length) 
+            return target;
+        
+        const source = sources.shift();
+        if (Utils.isObject(target) && Utils.isObject(source)) {
+            for (const key in source) {
+                if (Utils.isObject(source[key])) {
+                    if (!target[key]) {
+                        Object.assign(target, { [key]: {} });
+                    }
+                    Utils.mergeDeep(target[key], source[key]);
+                } else {
+                    Object.assign(target, { [key]: source[key] });
+                }
+            }
+        }
+    
+        return Utils.mergeDeep(target, ...sources);
+    }
 }
 
 module.exports = Utils;

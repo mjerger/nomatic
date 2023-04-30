@@ -1,21 +1,45 @@
 {
     "app" : {
-        "port" : 1337
+      "port" : 1337,
+      "url"  : "http://localhost:1337/"
     },
 
-    "bots" : [
-        {
-          "type"  : "telegram", 
-          "id"    : "telegram",
-          "token" : "5903461993:AAHWcaYGPd-zzi-ttJ6HoLczJN00etgEozw"
-        },
-        { 
-          "type" : "email",
-          "id"   : "mail-global",
-          "email" : "alert@neals.de"
-        }
+    "api"  : { 
+      "enabled" : true, 
+      "token" : "<secret>" 
+    },
+
+    "nomctrl" : {
+      "enabled" : true, 
+      "api" : "http://localhost:31337/",
+      "token" : "<secret>"
+    },
+
+    "email" : { 
+      "enabled" : true, 
+      "sender"  : "<secret>",
+      "contacts" : {
+        "alarm"   : [ ],
+        "warn"    : [ ],
+        "info"    : [ ]
+      }
+    },
+
+    "telegram" : {
+      "enabled" : true, 
+      "token" : "<secret>"
+    },
+
+    "cronjobs" : [
+      { "id" : "job1", "when" : "01 04 * * *", "cmd" : "func1" }
     ],
 
-    "hooks" : [
+    "watchdog" : [
+      { "id" : "timer1", "seconds" : "3600", "cmd" : "func1" }
+    ],
+
+    "webhooks" : [
+      { "id" : "hook1", "cmd" : "func2", "token" : "<secret>"}
     ]
+
 }

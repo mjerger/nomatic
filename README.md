@@ -1,1 +1,4 @@
 # nomatic
+
+## Setup
+- 
