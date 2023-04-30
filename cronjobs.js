@@ -55,12 +55,15 @@ class CronJobs
     static jobs = new Map();
 
     static init(config) {
-        console.log ('Loading cronjobs ...');
+        this.enabled = false;
+            if (config.enabled) {
+            console.log ('Loading cronjobs ...');
 
-        this.jobs.clear();
-        for (const cfg of config) {
-            const job = new CronJob(cfg);
-            this.jobs.set(cfg.id, job);
+            this.jobs.clear();
+            for (const cfg of config.jobs) {
+                const job = new CronJob(cfg);
+                this.jobs.set(cfg.id, job);
+            }
         }
     }
 

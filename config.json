@@ -1,7 +1,22 @@
 {
     "app" : {
       "port" : 1337,
-      "url"  : "http://localhost:1337/"
+      "url"  : "http://localhost:1337/",
+      "notify" : {
+        "info" : {
+          "email" : [ "notify-info@example.com" ],
+          "telegram" : [ ],
+          "push" : [ ],
+          "hook" : [ ]
+        },
+        "alert" : {
+          "email" : [ "notify-alert@example.com" ],
+          "telegram" : [ ],
+          "push" : [ ],
+          "hook" : [ ],
+          "sms"  : [ ]
+        }
+      }
     },
 
     "api"  : { 
@@ -25,10 +40,14 @@
         "pass" : "testpassword"
       },
       "sender"  : "noreply@example.com",
-      "contacts" : {
-        "alarm"   : [ "alarm@example.com" ],
-        "warn"    : [ "warn@example.com"  ],
-        "info"    : [ "info@example.com"  ]
+      "subject" : "nomatic {level} {message}"
+    },
+
+    "sms" : { 
+      "enabled" : true,
+      "twilio" : {
+        "sid"   : "<sid>",
+        "token" : "<token>"
       }
     },
 
@@ -37,16 +56,24 @@
       "token" : "01234567890:ABCdeFGHIJ-abc-abCDEFgHIjKlmnOPQRSt"
     },
 
-    "cronjobs" : [
-      { "id" : "job1", "when" : "01 04 * * *", "cmd" : "func1" }
-    ],
+    "cronjobs" : {
+      "enabled" : true,
+      "jobs" : [
+        { "id" : "job1", "when" : "01 04 * * *", "cmd" : "func1" }
+      ]
+    },
 
-    "watchdog" : [
-      { "id" : "timer1", "seconds" : "3600", "cmd" : "func1" }
-    ],
+    "watchdog" : {
+      "enabled" : true,
+      "timers" : [
+        { "id" : "timer1", "seconds" : "3600", "cmd" : "func1" }
+      ]
+    },
 
-    "webhooks" : [
-      { "id" : "hook1", "cmd" : "func2", "token" : "<secret>"}
-    ]
-
+    "webhooks" : {
+      "enabled" : true,
+      "hooks" : [
+        { "id" : "hook1", "cmd" : "func2", "token" : "<secret>"}
+      ]
+    }
 }

@@ -10,13 +10,17 @@ class Commands
 
         // modules
         for (const module of modules) {
-            for (const cmd of module.cmds()) {
-                this.cmds.set(cmd, module);
+            if (module.enabled) {
+                for (const cmd of module.cmds()) {
+                    this.cmds.set(cmd, module);
+                }
             }
         }
 
         // built-in
         // TODO
+
+        console.log(`There are ${this.cmds.length} commands.`);
     }
 
     static async exec(cmd, ...args) {

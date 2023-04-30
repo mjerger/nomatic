@@ -1,6 +1,7 @@
 const Config    = require('./config.js');
 const Commands  = require('./commands.js');
 const Functions = require('./functions.js');
+const Notify    = require('./telegram.js');
 const Jobs      = require('./cronjobs.js');
 const Watchdog  = require('./watchdog.js');
 const Hooks     = require('./webhooks.js');
@@ -31,6 +32,10 @@ app.listen(Config.app().port, function () {
                    Telegram, 
                    Mail, 
                    nomctrl]);
+
+    Notify.init([Mail, 
+                 Telegram,
+                 nomctrl])
 
     Jobs    .start();
     Telegram.start();

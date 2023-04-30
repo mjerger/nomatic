@@ -14,17 +14,40 @@ class Webhooks
     static hooks = new Map();
     
     static init (config) {
-        console.log ('Loading webhooks ...');
+        this.enabled = false;
+        if (config.enabled) {
+            console.log ('Loading webhooks ...');
 
-        this.hooks.clear();
-        for (const cfg of config) {
-            const hook = new Webhook(cfg);
-            this.hooks.set(cfg.id, hook);
+            this.hooks.clear();
+            for (const cfg of config.hooks) {
+                const hook = new Webhook(cfg);
+                this.hooks.set(cfg.id, hook);
+            }
+
+            this.enabled = true;
         }
     }
 
     static async start() {
         console.log ('Starting webhooks ...');
+    }
+
+    static hasTrigger() {
+        return true;
+    }
+
+    static async trigger(id, token, value) {
+        if (this.hooks.has(id)) {
+            var hook = this.hooks[id];
+            if (hook.token === token) {
+                const cmd = hook.cmd.replace('{value}', value);
+                await Commands.exec(cmd.split(/\s/));
+            } else {
+                console.log (`Webhooks Error: invalid token for hook '${id}'.`);
+            }
+        } else {
+            console.log (`Webhooks Error: invalid hook '${id}'.`);
+        }
     }
 
 }

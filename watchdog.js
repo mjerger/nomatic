@@ -31,12 +31,17 @@ class Watchdog extends Module
     static timers = new Map();
     
     static init(config) { 
-        console.log('Loading watchdogs ...');
+        this.enabled = false;
+        if (config.enabled) {
+            console.log('Loading watchdogs ...');
 
-        this.timers.clear();
-        for (const cfg of config) {
-            const timer = new WatchdogTimer(cfg, this.callback);
-            this.timers.set(cfg.id, timer);
+            this.timers.clear();
+            for (const cfg of config.timers) {
+                const timer = new WatchdogTimer(cfg, this._callback);
+                this.timers.set(cfg.id, timer);
+            }
+
+            this.enabled = true;
         }
     }
 
@@ -47,7 +52,7 @@ class Watchdog extends Module
         }
     }
 
-    static callback(id, cmd) {
+    static _callback(id, cmd) {
         // TODO exec cmd
     }
 }

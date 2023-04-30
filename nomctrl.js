@@ -2,10 +2,16 @@ const Module = require('./module.js');
 
 class nomctrl extends Module
 {
+    static canSend() { return true; }
+
     static init(config) {
-        console.log ('Loading nomctrl API ...');
-        this.api = config.url;
-        this.token = config.token;
+        this.enabled = false;
+        if (config.enabled) {
+            console.log ('Loading nomctrl API ...');
+            this.enabled = true;
+            this.api = config.url;
+            this.token = config.token;
+        }
     }
 
     static cmds() {
@@ -15,6 +21,10 @@ class nomctrl extends Module
 
     static async exec(...argss) {
 
+    }
+
+    static async send(contact, message) {
+        // TODO send message to apartment
     }
 
 }
