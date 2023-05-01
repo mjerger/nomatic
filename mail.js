@@ -2,9 +2,14 @@ const Module = require('./module.js');
 
 class Mail extends Module
 {
-    static canSend() { return true; }
+    constructor(nomatic) {
+        super();
+        this.nomatic = nomatic;
+    }
 
-    static init(config) {
+    canSend() { return true; }
+
+    init(config) {
         this.enabled = false;
         if (config.enabled) {
             console.log ('Loading email service ...');
@@ -16,15 +21,15 @@ class Mail extends Module
         }
     }
 
-    static cmds() {
+    cmds() {
         return [ 'send_mail' ]
     }
 
-    static async send_mail(contact, subject, message) {
+    async send_mail(contact, subject, message) {
         // TODO send mail
     }
 
-    static async send(contact, message) {
+    async send(contact, message) {
         // TODO send mail
     }
 

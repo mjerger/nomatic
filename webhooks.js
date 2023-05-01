@@ -1,4 +1,4 @@
-const Utils   = require('./utils.js');
+const Module = require('./module.js');
 
 class Webhook
 {
@@ -9,11 +9,16 @@ class Webhook
     }
 }
 
-class Webhooks
+class Webhooks extends Module
 {
-    static hooks = new Map();
+    constructor(nomatic) {
+        super();
+        this.nomatic = nomatic;
+    }
+
+    hooks = new Map();
     
-    static init (config) {
+    init (config) {
         this.enabled = false;
         if (config.enabled) {
             console.log ('Loading webhooks ...');
@@ -28,15 +33,15 @@ class Webhooks
         }
     }
 
-    static async start() {
+    async start() {
         console.log ('Starting webhooks ...');
     }
 
-    static hasTrigger() {
+    hasTrigger() {
         return true;
     }
 
-    static async trigger(id, token, value) {
+    async trigger(id, token, value) {
         if (this.hooks.has(id)) {
             var hook = this.hooks[id];
             if (hook.token === token) {

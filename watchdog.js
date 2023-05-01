@@ -9,17 +9,17 @@ class WatchdogTimer
         this.callback = callback;
     }
 
-    static start() {
+    start() {
         this.reset();
         this.timer = setTimeout(this.timerElapsed.bind(this), this.seconds * 1000);
     }
 
-    static timerElapsed() {
+    timerElapsed() {
         this.callback(this.id, this.cmd);
         this.start();
     }
 
-    static reset() {
+    reset() {
         if (this.timer)
             clearTimeout(this.timer);
     }
@@ -28,9 +28,14 @@ class WatchdogTimer
 
 class Watchdog extends Module
 {
-    static timers = new Map();
-    
-    static init(config) { 
+    constructor(nomatic) {
+        super();
+        this.nomatic = nomatic;
+    }
+
+    timers = new Map();
+
+    init(config) { 
         this.enabled = false;
         if (config.enabled) {
             console.log('Loading watchdogs ...');
@@ -45,14 +50,14 @@ class Watchdog extends Module
         }
     }
 
-    static start() {
+    start() {
         console.log('Starting watchdogs ...');
         for (const [id, timer] of this.timers) {
             timer.start();
         }
     }
 
-    static _callback(id, cmd) {
+    _callback(id, cmd) {
         // TODO exec cmd
     }
 }

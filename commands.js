@@ -1,9 +1,13 @@
 
 class Commands 
 {
-    static cmds = new Map();
+    constructor(nomatic) {
+        this.nomatic = nomatic;
+    }
 
-    static init(modules) {
+    cmds = new Map();
+
+    init(modules) {
         console.log ('Loading commands ...', );
 
         this.cmds.clear();
@@ -23,10 +27,10 @@ class Commands
         console.log(`There are ${this.cmds.length} commands.`);
     }
 
-    static async exec(cmd, ...args) {
+    async exec(cmd, ...args) {
         var module = this.cmds.get(cmd);
         if (module !== undefined) {
-            module.exec(...args);
+            await module.exec(...args);
         }
         else {
             console.log(`Command Error: Could not execute ${cmd} with argument ${args.join(' ')}`);

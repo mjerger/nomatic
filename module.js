@@ -1,27 +1,21 @@
+class Module 
+{
 
-class Module {
+    init(config)  { throw new Error('Not Implemented: init()');  }
+    async start() { throw new Error('Not Implemented: start()'); }
 
-    constructor() {
-        if (this.constructor == Module) {
-          throw new Error('Abstract classe Module can\'t be instantiated.');
-        }
-    }
+    cmds() { throw new Error('Not Implemented: cmds()'); }
+    man()  { throw new Error('Not Implemented: man()');  }
 
-    static init(config)  { throw new Error('Not Implemented: init()');  }
-    static async start() { throw new Error('Not Implemented: start()'); }
-
-    static cmds() { throw new Error('Not Implemented: cmds()'); }
-    static man()  { throw new Error('Not Implemented: man()');  }
-
-    static async exec(cmd, ...args) { 
+    async exec(cmd, ...args) { 
         this[cmd](...args);
     }
 
-    static canSend() { return false; }
-    static async send(contact, message) { throw new Error('Not Implemented: send()');  }
+    canSend() { return false; }
+    async send(contact, message) { throw new Error('Not Implemented: send()');  }
 
-    static hasTrigger() { return false; }
-    static async trigger(id, value)    { throw new Error('Not Implemented: trigger()');  }
+    hasTrigger() { return false; }
+    async trigger(id, value)    { throw new Error('Not Implemented: trigger()');  }
 }
 
 module.exports = Module

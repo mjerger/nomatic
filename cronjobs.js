@@ -1,4 +1,4 @@
-const Config = require('./config.js');
+const Module = require('./module.js');
 const Parser = require('cron-parser');
 
 class CronJob {
@@ -22,39 +22,35 @@ class CronJob {
     }
 
     getNextDate() {
-        return this.next;
+        return this.nextDate;
     }
 
     isActive() {
-        const now = new Date().getTime();
-        if (this.next === undefined)
+        if (this.nextDate === undefined)
             return false;
 
-        if (this.next.value !== undefined )
-            return (this.next.value.getTime() <= now-100) && !this.next.done;
+        if (this.nextDate.value !== undefined )
+            return  !this.nextDate.done;
 
-        return this.next.getTime() <= now+100;
+        return true;
     }
 
     next() {
-        this.next = this.interval.next();
-        return this.next;
+        this.nextDate = this.interval.next();
     }
-
-    run() {
-        this.execute();
-        this.next();
-    }
-
-    execute () { throw new Error('Not Implemented.') }
 }
 
 
-class CronJobs
+class CronJobs extends Module
 {
-    static jobs = new Map();
+    constructor(nomatic) {
+        super();
+        this.nomatic = nomatic;
+    }
 
-    static init(config) {
+    jobs = new Map();
+
+    init(config) {
         this.enabled = false;
             if (config.enabled) {
             console.log ('Loading cronjobs ...');
@@ -67,18 +63,19 @@ class CronJobs
         }
     }
 
-    static async start() {
+    async start() {
         console.log ('Starting cronjobs ...');
-        this.run();
+        return this.run();
     }
 
-    static async run() {
-
+    async run() {
         const now = new Date();
         let dates = [];
         for (const [id,job] of this.jobs) {
-            if (now > job.getNextDate()) {
-                job.run();
+            const nextTime = job.getNextDate();
+            if (now.getTime() > nextTime.getTime()) {
+                await this.nomatic.cmds.exec(job.cmd);
+                job.next();
             }
 
             if (job.isActive()) {

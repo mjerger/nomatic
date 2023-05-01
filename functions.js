@@ -1,14 +1,19 @@
 const Module = require('./module.js');
+const Nomatic = require('./nomatic.js');
 
 class Functions extends Module
 {
+    constructor(nomatic) {
+        super();
+        this.nomatic = nomatic;
+    }
 
-    static cmds() {
+    cmds() {
         return ['test']
     }
 
-    static test() {
-
+    test() {
+        Nomatic.bot.start()
     }
 }
 

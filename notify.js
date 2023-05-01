@@ -2,11 +2,16 @@ const Module = require('./module.js');
 
 class Notify extends Module
 {
-    static canSend() { return true; }
+    constructor(nomatic) {
+        super();
+        this.nomatic = nomatic;
+    }
 
-    static receivers = new Map();
+    canSend() { return true; }
 
-    static init(config, senderModules) {
+    receivers = new Map();
+
+    init(config, senderModules) {
         console.log ('Loading notification settings ...');
         this.channels = { ...config };
         
@@ -17,16 +22,16 @@ class Notify extends Module
         }
     }
 
-    static cmds() {
+    cmds() {
         const channels = Object.keys(this.channels);
         return { 'notify' : channels};
     }
 
-    static async notify(level, message) {
+    async notify(level, message) {
         return this.send(level, message);
     }
 
-    static async send(level, message) {
+    async send(level, message) {
         for (const channel in Object.keys(this.channels[level])) {
             const contacts = this.channels.get(level)[channel];
             if (this.receivers.has(channel)) {
@@ -42,4 +47,4 @@ class Notify extends Module
 
 }
 
-module.exports = nomctrl;
+module.exports = Notify;

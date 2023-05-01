@@ -2,9 +2,14 @@ const Module = require('./module.js');
 
 class nomctrl extends Module
 {
-    static canSend() { return true; }
+    constructor(nomatic) {
+        super();
+        this.nomatic = nomatic;
+    }
 
-    static init(config) {
+    canSend() { return true; }
+
+    init(config) {
         this.enabled = false;
         if (config.enabled) {
             console.log ('Loading nomctrl API ...');
@@ -14,16 +19,16 @@ class nomctrl extends Module
         }
     }
 
-    static cmds() {
+    cmds() {
         return [ 'nomctrl' ]
     }
 
 
-    static async exec(...argss) {
+    async exec(...argss) {
 
     }
 
-    static async send(contact, message) {
+    async send(contact, message) {
         // TODO send message to apartment
     }
 

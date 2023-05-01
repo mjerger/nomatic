@@ -2,9 +2,14 @@ const Module = require('./module.js');
 
 class Telegram extends Module
 {
-    static canSend() { return true; }
+    constructor(nomatic) {
+        super();
+        this.nomatic = nomatic;
+    }
 
-    static init(config) {
+    canSend() { return true; }
+
+    init(config) {
         this.enabled = false;
         if (config.enabled) {
             console.log ('Loading Telegram config ...');
@@ -13,19 +18,19 @@ class Telegram extends Module
         }
     }
 
-    static async start() {
+    async start() {
         console.log ('Starting Telegram bot ...');
     }
 
-    static cmds() {
+    cmds() {
         return ['send_telegram'];
     }
 
-    static async send_telegram(contact, message) {
+    async send_telegram(contact, message) {
         return this.send(contact, message);
     }
 
-    static async send(contact, message) {
+    async send(contact, message) {
         // TODO        
     }
 

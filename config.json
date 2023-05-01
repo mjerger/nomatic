@@ -1,21 +1,20 @@
 {
     "app" : {
       "port" : 1337,
-      "url"  : "http://localhost:1337/",
-      "notify" : {
-        "info" : {
-          "email" : [ "notify-info@example.com" ],
-          "telegram" : [ ],
-          "push" : [ ],
-          "hook" : [ ]
-        },
-        "alert" : {
-          "email" : [ "notify-alert@example.com" ],
-          "telegram" : [ ],
-          "push" : [ ],
-          "hook" : [ ],
-          "sms"  : [ ]
-        }
+      "url"  : "http://localhost:1337/"
+    },
+
+    "notify" : {
+      "info" : {
+        "email" : [ "notify-info@example.com" ],
+        "telegram" : [ ],
+        "push" : [ ]
+      },
+      "alert" : {
+        "email" : [ "notify-alert@example.com" ],
+        "telegram" : [ ],
+        "push" : [ ],
+        "hook" : [ ]
       }
     },
 
@@ -43,14 +42,6 @@
       "subject" : "nomatic {level} {message}"
     },
 
-    "sms" : { 
-      "enabled" : true,
-      "twilio" : {
-        "sid"   : "<sid>",
-        "token" : "<token>"
-      }
-    },
-
     "telegram" : {
       "enabled" : true, 
       "token" : "01234567890:ABCdeFGHIJ-abc-abCDEFgHIjKlmnOPQRSt"
@@ -59,7 +50,7 @@
     "cronjobs" : {
       "enabled" : true,
       "jobs" : [
-        { "id" : "job1", "when" : "01 04 * * *", "cmd" : "func1" }
+        { "id" : "job1", "when" : "*/5 * * * * *", "cmd" : "func1" }
       ]
     },
 

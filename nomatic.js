@@ -1,7 +1,7 @@
 const Config    = require('./config.js');
 const Commands  = require('./commands.js');
 const Functions = require('./functions.js');
-const Notify    = require('./telegram.js');
+const Notify    = require('./notify.js');
 const Jobs      = require('./cronjobs.js');
 const Watchdog  = require('./watchdog.js');
 const Hooks     = require('./webhooks.js');
@@ -13,35 +13,55 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
+class Nomatic {
+
+    constructor(app) {
+        this.app = app;
+        this.jobs   = new Jobs(this);
+        this.dog    = new Watchdog(this);
+        this.hooks  = new Hooks(this);
+        this.mail   = new Mail(this);
+        this.bot    = new Telegram(this);
+        this.nc     = new nomctrl(this);
+        this.funcs  = new Functions(this);
+        this.cmds   = new Commands(this);
+        this.notify = new Notify(this);
+    }
+    
+    init(config) {
+        this.config = config;
+
+        this.jobs .init(config.cronjobs);
+        this.dog  .init(config.watchdog);
+        this.hooks.init(config.webhooks);
+        this.mail .init(config.email   );
+        this.bot  .init(config.telegram);
+        this.nc   .init(config.nomctrl );
+    
+        this.cmds.init([this.funcs, this.bot, this.mail, this.nc]);    
+        this.notify.init(config.notify, [this.mail, this.bot, this.nc])
+    }
+
+    async start() {
+        const port = this.config.app.port;
+
+        this.app.listen(port, function () {
+            app.use(bodyParser.json());
+            app.use(express.urlencoded())
+            console.log(`nomatic listening on port ${port}!`);
+        });
+
+        await this.jobs.start();
+    }
+}
+
+module.exports = Nomatic;
+
 // STARTUP
-
-app.listen(Config.app().port, function () {
-    app.use(bodyParser.json());
-    app.use(express.urlencoded())
-
-    console.log ('Starting up ...');
-
-    Jobs    .init(Config.cronjobs());
-    Watchdog.init(Config.watchdog());
-    Hooks   .init(Config.webhooks());
-    Mail    .init(Config.email()   );
-    Telegram.init(Config.telegram());
-    nomctrl .init(Config.nomctrl() );
-
-    Commands.init([Functions, 
-                   Telegram, 
-                   Mail, 
-                   nomctrl]);
-
-    Notify.init([Mail, 
-                 Telegram,
-                 nomctrl])
-
-    Jobs    .start();
-    Telegram.start();
-
-    console.log(`nomatic listening on port ${Config.app().port}!`);
-});
+console.log ('nomatic starting up ...');
+var nomatic = new Nomatic(app);
+nomatic.init(Config.get());
+nomatic.start();
 
 app.get('/', async (req, res) => {
     res.send('nomatic up');
@@ -50,7 +70,7 @@ app.get('/', async (req, res) => {
 app.use((req, res, next) => {
 
     // disabled
-    if (!Config.api().enabled) {
+    if (!Config.get().api.enabled) {
         res.status(404).send();
         return;
 
