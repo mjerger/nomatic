@@ -26,18 +26,19 @@ class Nomatic {
         this.notify = new Notify(this);
     }
     
-    init(config) {
+    configure(config) {
         this.config = config;
-
-        this.jobs .init(config.cronjobs);
-        this.dog  .init(config.watchdog);
-        this.hooks.init(config.webhooks);
-        this.mail .init(config.email   );
-        this.bot  .init(config.telegram);
-        this.nc   .init(config.nomctrl );
-    
-        this.cmds.init([this.funcs, this.bot, this.mail, this.nc]);    
-        this.notify.init(config.notify, [this.mail, this.bot, this.nc])
+        
+        this.funcs.configure(config.functions);
+        this.jobs .configure(config.cronjobs);
+        this.dog  .configure(config.watchdog);
+        this.hooks.configure(config.webhooks);
+        this.mail .configure(config.email   );
+        this.bot  .configure(config.telegram);
+        this.nc   .configure(config.nomctrl );
+        
+        this.cmds.configure([this.funcs, this.bot, this.mail, this.nc]);    
+        this.notify.configure(config.notify, [this.mail, this.bot, this.nc])
     }
 
     async start() {

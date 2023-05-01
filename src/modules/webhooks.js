@@ -16,9 +16,10 @@ class Webhooks extends Module
         this.nomatic = nomatic;
     }
 
+    canStart() { return true; }
     hooks = new Map();
     
-    init (config) {
+    configure (config) {
         this.enabled = false;
         if (config.enabled) {
             console.log ('Loading webhooks ...');
@@ -29,12 +30,19 @@ class Webhooks extends Module
                 this.hooks.set(cfg.id, hook);
             }
 
-            this.enabled = true;
+            if (this.hooks.size > 0) {
+                console.log(`Loaded ${this.hooks.size} webhooks.`)
+                this.enabled = true;
+            } else {
+                console.log ('No webhooks to load, disabling.');    
+            }
+
         }
     }
 
     async start() {
         console.log ('Starting webhooks ...');
+        this.running = (this.hooks.size > 0);
     }
 
     hasTrigger() {

@@ -7,19 +7,27 @@ class Telegram extends Module
         this.nomatic = nomatic;
     }
 
-    canSend() { return true; }
+    canStart() { return true; }
+    canSend()  { return true; }
 
-    init(config) {
+    configure(config) {
         this.enabled = false;
         if (config.enabled) {
-            console.log ('Loading Telegram config ...');
-            this.enabled = config.enabled;
+            console.log ('Configuring Telegram bot ...');
+            this.enabled = true;
             this.token = config.token;
+        } else {
+            console.log ('Telegram bot is disabled.');
         }
     }
 
     async start() {
         console.log ('Starting Telegram bot ...');
+        this.running = true;
+    }
+
+    async stop() {
+        this.running = false;
     }
 
     cmds() {

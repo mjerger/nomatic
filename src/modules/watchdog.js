@@ -33,12 +33,13 @@ class Watchdog extends Module
         this.nomatic = nomatic;
     }
 
+    canStart() { return true; }
     timers = new Map();
 
-    init(config) { 
+    configure(config) { 
         this.enabled = false;
         if (config.enabled) {
-            console.log('Loading watchdogs ...');
+            console.log('Configuring watchdog ...');
 
             this.timers.clear();
             for (const cfg of config.timers) {
@@ -46,14 +47,31 @@ class Watchdog extends Module
                 this.timers.set(cfg.id, timer);
             }
 
-            this.enabled = true;
+            if (this.timers.size > 0) {
+                console.log (`Loaded ${this.timers.size} watchdog timers.`);    
+                this.enabled = true;
+            } else {
+                console.log ('No watchdog timers to load, disabling.');    
+            }
+        } else {
+            console.log ('Watchdog is disabled.');
         }
     }
 
-    start() {
+    async start() {
         console.log('Starting watchdogs ...');
         for (const [id, timer] of this.timers) {
             timer.start();
+        }
+
+        this.running = (this.timers.size > 0);
+    }
+
+    async stop() {
+        console.log('Stopping watchdogs ...');
+        this.running = false;
+        for (const [id, timer] of this.timers) {
+            timer.reset();
         }
     }
 

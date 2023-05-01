@@ -7,7 +7,7 @@ class Commands
 
     cmds = new Map();
 
-    init(modules) {
+    configure(modules) {
         console.log ('Loading commands ...', );
 
         this.cmds.clear();
@@ -24,7 +24,7 @@ class Commands
         // built-in
         // TODO
 
-        console.log(`There are ${this.cmds.length} commands.`);
+        console.log(`There are ${this.cmds.size} commands: ${Array.from(this.cmds.keys())}`);
     }
 
     async exec(cmd, ...args) {

@@ -9,20 +9,21 @@ class nomctrl extends Module
 
     canSend() { return true; }
 
-    init(config) {
+    configure(config) {
         this.enabled = false;
         if (config.enabled) {
-            console.log ('Loading nomctrl API ...');
+            console.log ('Configuring nomctrl API ...');
             this.enabled = true;
             this.api = config.url;
             this.token = config.token;
+        } else {
+            console.log ('nomctrl API is disabled.');
         }
     }
 
     cmds() {
         return [ 'nomctrl' ]
     }
-
 
     async exec(...argss) {
 

@@ -1,13 +1,27 @@
 class Module 
 {
-    init(config)  { throw new Error('Not Implemented: init()');  }
-    async start() { throw new Error('Not Implemented: start()'); }
+    configure(config)  { throw new Error('Not Implemented: configure()');  }
+
+    canStart()    { return false; }
+    async start() { }
+    async stop()  { }
+    
+    async reconfigure(config) {
+        await this.stop();
+        this.configure(config);
+        await this.start();
+    }
+
+    async restart() { 
+        await this.stop();
+        await this.start();
+    }
 
     cmds() { throw new Error('Not Implemented: cmds()'); }
     man()  { throw new Error('Not Implemented: man()');  }
 
     async exec(cmd, ...args) { 
-        this[cmd](...args);
+        return this[cmd](...args);
     }
 
     canSend() { return false; }

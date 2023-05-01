@@ -5,6 +5,7 @@
     },
 
     "notify" : {
+      "enabled" : true,
       "info" : {
         "email" : [ "notify-info@example.com" ],
         "telegram" : [ ],
@@ -45,6 +46,13 @@
     "telegram" : {
       "enabled" : true, 
       "token" : "01234567890:ABCdeFGHIJ-abc-abCDEFgHIjKlmnOPQRSt"
+    },
+
+    "functions" : {
+      "enabled" : true,
+      "definitions" : [
+        { "id" : "test", "js" : "test(arg1,arg2) { console.log(arg1+arg2); return true; }"}
+      ]
     },
 
     "cronjobs" : {

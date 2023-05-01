@@ -48,24 +48,42 @@ class CronJobs extends Module
         this.nomatic = nomatic;
     }
 
+    canStart() { return true; }
     jobs = new Map();
 
-    init(config) {
+    configure(config) {
         this.enabled = false;
-            if (config.enabled) {
-            console.log ('Loading cronjobs ...');
+        if (config.enabled) {
+            console.log ('Configuring cronjobs ...');
 
             this.jobs.clear();
             for (const cfg of config.jobs) {
                 const job = new CronJob(cfg);
                 this.jobs.set(cfg.id, job);
             }
+
+            if (this.jobs.size > 0) {
+                console.log (`Loaded ${this.jobs.size} cronjobs.`);
+            } else {
+                console.log('No cronjobs, disabling.')
+            }
+        } else {
+            console.log ('Cronjobs are disabled.');
         }
     }
 
     async start() {
         console.log ('Starting cronjobs ...');
+        this.running = true;
         return this.run();
+    }
+
+    async stop() {
+        console.log ('Stopping cronjobs ...');
+        this.running = false;
+        if (this.timer) {
+            clearTimeout(this.timer);
+        }
     }
 
     async run() {
@@ -90,7 +108,7 @@ class CronJobs extends Module
             const ms = next.getTime() - now.getTime();
 
             console.log('Cronjobs: Scheduling next action for ' + next);
-            setTimeout(this.run.bind(this), ms);
+            this.timer = setTimeout(this.run.bind(this), ms);
         }
     }
 }

@@ -7,18 +7,29 @@ class Mail extends Module
         this.nomatic = nomatic;
     }
 
-    canSend() { return true; }
+    canStart() { return true; }
+    canSend()  { return true; }
 
-    init(config) {
+    configure(config) {
         this.enabled = false;
         if (config.enabled) {
-            console.log ('Loading email service ...');
+            console.log ('Configuring email service ...');
             this.enabled  = true;
             this.sender   = config.sender;
             this.smtp     = config.smtp;
             this.contacts = { ...config.contacts };
             this.sender   = config.sender;
+        } else {
+            console.log ('Email service is disabled.');
         }
+    }
+
+    async start() {
+        this.running = true;
+    }
+
+    async stop() {
+        this.running = false;
     }
 
     cmds() {

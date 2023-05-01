@@ -13,10 +13,10 @@ const app = express();
 
 // instance
 const nomatic = new Nomatic();
-nomatic.init(Config.get());
+nomatic.configure(Config.get());
 nomatic.start();
 
-app.use('/', nomatic.routes())
+app.use('/foo/', nomatic.routes())
 
 app.listen(port, function () {
     app.use(bodyParser.json());
