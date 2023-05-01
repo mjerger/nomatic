@@ -1,6 +1,5 @@
 class Module 
 {
-
     init(config)  { throw new Error('Not Implemented: init()');  }
     async start() { throw new Error('Not Implemented: start()'); }
 

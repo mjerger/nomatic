@@ -1,5 +1,4 @@
 const Module = require('./module.js');
-const Nomatic = require('./nomatic.js');
 
 class Functions extends Module
 {
@@ -13,7 +12,6 @@ class Functions extends Module
     }
 
     test() {
-        Nomatic.bot.start()
     }
 }
 
