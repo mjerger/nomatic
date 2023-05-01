@@ -9,14 +9,12 @@ const Mail      = require('./modules/mail.js');
 const Telegram  = require('./modules/telegram.js');
 const nomctrl   = require('./modules/nomctrl.js');
 
-const express = require('express');
+const express    = require('express');
 const bodyParser = require('body-parser');
-const app = express();
 
 class Nomatic {
 
-    constructor(app) {
-        this.app = app;
+    constructor() {
         this.jobs   = new Jobs(this);
         this.dog    = new Watchdog(this);
         this.hooks  = new Hooks(this);
@@ -43,64 +41,56 @@ class Nomatic {
     }
 
     async start() {
-        const port = this.config.app.port;
+        await this.jobs.start();
+    }
 
-        this.app.listen(port, function () {
-            app.use(bodyParser.json());
-            app.use(express.urlencoded())
-            console.log(`nomatic listening on port ${port}!`);
+    routes() {
+        var routes = express.Router();
+
+        routes.get('/', async (req, res) => {
+            res.send('nomatic up');
         });
 
-        await this.jobs.start();
+        routes.use((req, res, next) => {
+
+            // disabled
+            if (!Config.get().api.enabled) {
+                res.status(404).send();
+                return;
+
+            // check auth
+            } else {
+                const auth = req.headers.authoriation;
+                if (auth) {
+                    if (auth === Config.api().token ||
+                        auth === 'Basic ' + Config.api().token)
+                    {
+                        // access granted
+                        return next()
+                    }
+                }
+            }
+
+            // access denied
+            res.set('WWW-Authenticate', "Basic realm='401'")
+            res.status(401).send('No.') 
+        });
+
+        routes.post('/cmd', 
+                bodyParser.text({type:'*/*'}), 
+                async (req, res) => 
+        {
+            console.log(`cmd: ${req.body}`);
+            res.send(await Commands.exec(req.body));
+        });
+
+        routes.get('/cmd/:cmd', async (req, res) => {
+            console.log(`cmd: ${req.params.cmd}`)
+            res.send(await Commands.exec(req.params.cmd));
+        });
+
+        return routes;
     }
 }
 
 module.exports = Nomatic;
-
-// STARTUP
-console.log ('nomatic starting up ...');
-var nomatic = new Nomatic(app);
-nomatic.init(Config.get());
-nomatic.start();
-
-app.get('/', async (req, res) => {
-    res.send('nomatic up');
-});
-
-app.use((req, res, next) => {
-
-    // disabled
-    if (!Config.get().api.enabled) {
-        res.status(404).send();
-        return;
-
-    // check auth
-    } else {
-        const auth = req.headers.authoriation;
-        if (auth) {
-            if (auth === Config.api().token ||
-                auth === 'Basic ' + Config.api().token)
-            {
-                // access granted
-                return next()
-            }
-        }
-    }
-
-    // access denied
-    res.set('WWW-Authenticate', "Basic realm='401'")
-    res.status(401).send('No.') 
-});
-
-app.post('/cmd', 
-        bodyParser.text({type:'*/*'}), 
-        async (req, res) => 
-{
-    console.log(`cmd: ${req.body}`);
-    res.send(await Commands.exec(req.body));
-});
-
-app.get('/cmd/:cmd', async (req, res) => {
-    console.log(`cmd: ${req.params.cmd}`)
-    res.send(await Commands.exec(req.params.cmd));
-});
